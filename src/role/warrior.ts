@@ -1,6 +1,6 @@
 
 
-export  class Warrior implements Creep {
+export  class Warrior  {
   public creep: Creep;
 
   constructor(creep: Creep) {

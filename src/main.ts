@@ -54,7 +54,7 @@ export const loop = function (): void {
       Warrior.run(creep)
     }
     if (creep.memory.role === 'heal') {
-      Healer
+      Healer.run(creep)
     }
   }
 
