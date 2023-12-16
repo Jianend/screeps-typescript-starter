@@ -34,6 +34,10 @@ interface CreepMemory {
   repairer?: boolean;
   /**是否在运输 */
   transport?: boolean;
+  /**
+   * 治疗id
+   */
+  healing?: any;
 
 
 }
