@@ -46,5 +46,7 @@ interface Memory {
    */
   SpawnLock?: boolean;
 
+  wars?:Object;
+
 }
 

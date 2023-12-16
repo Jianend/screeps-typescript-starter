@@ -23,22 +23,8 @@ class StructureSpawns   {
 
     spawn:StructureSpawn;
 
-    constructor(spawn:StructureSpawn,body?:BodyPartConstant[]) {
+    constructor(spawn:StructureSpawn) {
         this.spawn=spawn;
-      if (body != null&&builder!=undefined) {
-        for (let bodyElement of body) {
-
-          switch (bodyElement) {
-            case "attack":
-              this.createAttacker(130);
-            case "heal":
-              this.createHeal(300);
-          }
-        }
-
-      }
-
-
         // super()
     }
     createCustomCreep(energy:number,roleName:string):string|number|void{

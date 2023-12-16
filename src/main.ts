@@ -1,5 +1,6 @@
 
 // import { StructureSpawn } from "screeps";
+import {warController} from "mod/createWarControllerStartWar";
 
 import * as building from "building";
 import * as tower from "tower";
@@ -22,6 +23,10 @@ export const loop = function (): void {
         filter: { structureType: STRUCTURE_TOWER, my: true }
     });
     towers.forEach(tower.run);
+    // const 治疗攻击二人小队 = [ATTACK, HEAL];
+    // warController.addSquad(治疗攻击二人小队);
+
+
 
     // 根据 screep 的角色分配不同的任务
     for (const name in Game.creeps) {
