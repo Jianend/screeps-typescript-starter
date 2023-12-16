@@ -5,6 +5,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from 'rollup-plugin-typescript2';
 import screeps from 'rollup-plugin-screeps';
+// import typescript from 'rollup-plugin-typescript2' // <== 新增这一行
 
 let cfg;
 const dest = process.env.DEST;

@@ -29,6 +29,7 @@ module.exports = {
     }
   },
   rules: {
+    // 'prettier/prettier': 'error' ,
     "@typescript-eslint/array-type": "error",
     "@typescript-eslint/consistent-type-assertions": "error",
     "@typescript-eslint/consistent-type-definitions": "error",
