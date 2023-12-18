@@ -28,8 +28,8 @@ import { builder } from "./builder";
                 // the second argument for findClosestByPath is an object which takes
                 // a property called filter which can be a function
                 // we use the arrow operator to define it
-                // filter: (s) => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL
-                filter: (s) => s.hits < s.hitsMax
+                filter: (s) => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL
+                // filter: (s) => s.hits < s.hitsMax
 
             });
 

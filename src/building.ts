@@ -79,19 +79,22 @@ import {StructureSpawns} from "utils/prototype.spawn";
     let creep= Memory.world[spawn.room.name].creepNum
 
 
-    // console.log(creep > trucks.length || creep > harvesters.length);
+    // console.log(creep > trucks.length || creep > harvesters.length)
 
 
     if (creep > trucks.length || creep > harvesters.length) {
       if (Memory.world[spawn.room.name].food === 'Harvester') {
         if (harvesters.length < creep) {
-          let newName = 'Harvester' + Game.time;
+
 
 
           if (harvesters.length === 0) {
+            console.log(harvesters.length+""+spawn);
+
             let a: string | number | void;
             a = StructureSpawn.createHarvester(
-              200)
+              300)
+
 
 
             if (typeof a === "string") {
@@ -114,6 +117,7 @@ import {StructureSpawns} from "utils/prototype.spawn";
               let a: string | number | void;
               a = StructureSpawn.createHarvester(
                 800)
+
 
 
 
@@ -177,7 +181,7 @@ import {StructureSpawns} from "utils/prototype.spawn";
 
 
     // harvester等于2的时候生产 upgrader
-    if (trucks.length >= 2 && upgraders.length < 2) {
+    if (trucks.length >= creep && upgraders.length < 2) {
       let a: string | number | void;
 
 
@@ -193,7 +197,7 @@ import {StructureSpawns} from "utils/prototype.spawn";
 
     if (spawn.room.find(FIND_CONSTRUCTION_SITES).length > 0) {
       // 生产builder
-      if (builders.length < 2) {
+      if (builders.length < 0) {
         let a: string | number | void;
 
 
@@ -207,7 +211,7 @@ import {StructureSpawns} from "utils/prototype.spawn";
     }
 
     // console.log(upgraders.length>=2 )
-    if (upgraders.length >=2 && repairers.length < 2) {
+    if (upgraders.length >=creep && repairers.length < 2) {
     //   console.log("repairers")
       let a: string | number | void;
 

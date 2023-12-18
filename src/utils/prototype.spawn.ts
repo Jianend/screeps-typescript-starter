@@ -121,6 +121,7 @@ class StructureSpawns {
     body.push(MOVE);
     body.push(CARRY);
 
+
     return this.spawn.createCreep(body, newName, {role: 'harvester'});
 
   }
