@@ -29,7 +29,7 @@ export const roleUpgrader = {
         if (creep.room.controller == null) {
           console.log("房间 %s 中没有控制器", creep.room.name);
         } else if (creep.upgradeController(creep.room.controller) === ERR_NOT_IN_RANGE) {
-          creep.moveTo(creep.room.controller, { visualizePathStyle: { stroke: "#ffffff" } });
+          creep.moveTo(creep.room.controller, { visualizePathStyle: { stroke: "#ffffff" } ,reusePath:50});
         }
       } else {
         const currentRoom = creep.room;
@@ -96,7 +96,7 @@ function findNearestContainer(creep: Creep, energyNotFull: StructureContainer[])
 
 function creepWithdrawAndDeposit(creep: Creep, container: StructureContainer) {
     if (creep.withdraw(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(container, { visualizePathStyle: { stroke: 'ffffff' } });
+        creep.moveTo(container, { visualizePathStyle: { stroke: 'ffffff' } ,reusePath:50});
     }
 }
 

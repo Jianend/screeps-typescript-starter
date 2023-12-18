@@ -5,7 +5,7 @@
 export var builder = {
     /** @param {Creep} creep **/
     run: function (creep: Creep) {
-        var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+
         if (creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.building = false;
             creep.say('🔄 运输');
@@ -21,7 +21,9 @@ export var builder = {
         if (creep.memory.building) {
             // 在 creep 所在房间中找到所有的建筑工地
             const targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+
             if (targets.length) {
+
                 if (creep.build(targets[0]) === ERR_NOT_IN_RANGE) {
 
 
@@ -35,7 +37,13 @@ export var builder = {
             // var containers = creep.memory.containers.container;
             // var container = Game.getObjectById(containers.id);
             const currentRoom = creep.room;
-            const containers: StructureContainer[] = currentRoom.find(FIND_STRUCTURES, { filter: { structureType: STRUCTURE_CONTAINER } });
+            // const containers: StructureContainer[] = currentRoom.find(FIND_STRUCTURES, { filter: { structureType: STRUCTURE_CONTAINER } });
+            var containers = creep.room.find(FIND_STRUCTURES, { //找出需要补充能量的建筑
+                filter: (structure) => {
+                    return (structure.structureType == STRUCTURE_STORAGE || structure.structureType == STRUCTURE_CONTAINER ) &&
+                    structure.store.energy >0;
+                }
+            });
 
 
 
@@ -46,16 +54,16 @@ export var builder = {
 
             if (containers.length > 0) {
 
-                const energyNotFull: StructureContainer[] = containers.filter(
-                    (container) => container.store.energy >0
-                );
+                // const energyNotFull: Structure[] = containers.filter(
+                //     (container) => container.store.energy >0
+                // );
 
 
 
 
                 // let energyNotFull = containers.filter(element => element.store.energy > 0);
 
-                var nearestContainer = findNearestContainer(creep, energyNotFull);
+                var nearestContainer = findNearestContainer(creep, containers);
 
 
                 if (nearestContainer !== null) {
@@ -92,13 +100,13 @@ export var builder = {
 };
 
 
-function findNearestContainer(creep: Creep, energyNotFull: StructureContainer[]): StructureContainer | null {
+function findNearestContainer(creep: Creep, energyNotFull: Structure[]): Structure | null {
     if (energyNotFull.length === 0) {
         return null; // 提前返回，避免不必要的计算
     }
 
     let target = creep.pos;
-    let nearestContainer: StructureContainer | null = null;
+    let nearestContainer: Structure | null = null;
     let nearestDistance = Infinity;
 
     for (let container of energyNotFull) {
@@ -115,7 +123,7 @@ function findNearestContainer(creep: Creep, energyNotFull: StructureContainer[])
     return nearestContainer;
 }
 
-function creepWithdrawAndDeposit(creep: Creep, containers: StructureContainer) {
+function creepWithdrawAndDeposit(creep: Creep, containers: Structure) {
 
 
 
@@ -127,5 +135,4 @@ function creepWithdrawAndDeposit(creep: Creep, containers: StructureContainer) {
 
 
 }
-
 

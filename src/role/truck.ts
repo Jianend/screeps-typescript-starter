@@ -36,7 +36,7 @@ export var truck = {
             var tower = creep.room.find(FIND_STRUCTURES, { //找出需要补充能量的建筑
                 filter: (structure) => {
                     return (structure.structureType == STRUCTURE_TOWER) &&
-                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > creep.store.energy;
                 }
             });
 
@@ -50,7 +50,7 @@ export var truck = {
             });
             if (targets.length > 0) { // 需要维护的建筑数目 > 0
                 if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
+                    creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' },reusePath:50 });
                 }
             }else if (tower.length) {
 
@@ -150,14 +150,10 @@ function findNearestContainer(creep: Creep, energyNotFull: Structure[]): Structu
 
 function creepWithdrawAndDeposit(creep: Creep, containers: Structure) {
 
-    // console.log(creep.store.getFreeCapacity(RESOURCE_ENERGY) > 0);
 
-
-
-    // console.log(containers[0].id);
     // 将能量存放在 containers[0] 中
     if (creep.transfer(containers, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(containers, { visualizePathStyle: { stroke: '#ffffff' } });
+        creep.moveTo(containers, { visualizePathStyle: { stroke: '#ffffff' } ,reusePath:50});
     }
     // 从 containers 中提取能量
 

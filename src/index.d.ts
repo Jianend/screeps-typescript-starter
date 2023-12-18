@@ -52,5 +52,8 @@ interface Memory {
 
   wars?:Object;
 
+
+  world?:any;
+
 }
 

@@ -70,7 +70,7 @@ export  class  WarControllerContexter implements WarControllerContext {
   // }
 
   getRoomManager(): Creep[] {
-    return _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester' || creep.memory.role == 'truck');
+    return _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester' || creep.memory.role == 'truck'|| creep.memory.role == 'upgrader'|| creep.memory.role == 'repairer');
   }
 
   lendSpawn(): boolean {
@@ -81,21 +81,21 @@ export  class  WarControllerContexter implements WarControllerContext {
   }
 
   remandSpawn(): void {
-    Memory.SpawnLock = false;
+    Memory.SpawnLock = true;
   }
 
   static getRoomManager(): Creep[] {
-    return _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester' || creep.memory.role == 'truck');
+    return _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester' || creep.memory.role == 'truck'|| creep.memory.role == 'upgrader'|| creep.memory.role == 'repairer');
   }
   static lendSpawn() {
-    Memory.SpawnLock = true;
+    Memory.SpawnLock = false;
 
-    return true;
+    return false;
 
   }
 
   static remandSpawn() {
-    Memory.SpawnLock = false;
+    Memory.SpawnLock = true;
 
   }
 }
