@@ -17,7 +17,6 @@ import {building} from "building";
 const warController = createWarController({
   getMemory: () => {
     if (!Memory.wars) Memory.wars = {}
-    if (!Memory.SpawnLock) Memory.SpawnLock = true;
     return Memory.wars
   },
   lendSpawn: WarControllerContexter.lendSpawn,

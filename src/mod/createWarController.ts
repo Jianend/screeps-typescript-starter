@@ -47,18 +47,13 @@ export const createWarController = function (context: any) {
    * 应该传入一个小队类型，拿着这个小队类型去配置身体部件和强化资源
    */
   const addSquad = function (Spawn:StructureSpawn,小队部件: BodyPartConstant[]) {
-    const managers = getRoomManager()
-    if (managers.length >= 8) lendSpawn();
-    else remandSpawn();
-    if ( !Memory.SpawnLock) {
+    const managers = getRoomManager(Spawn)
+    if (managers.length >= Memory.world[Spawn.room.name].creepNum*4) lendSpawn(Spawn);
+    else remandSpawn(Spawn);
+    if ( !Memory.world[Spawn.room.name].SpawnLock) {
       // console.log("已锁定spawn 开始");
       let warSquad = WarSquad(Spawn,小队部件);
-    //   console.log(warSquad);
 
-    //   if (warSquad) {
-    //     remandSpawn();
-
-    //   }
     }
 
 

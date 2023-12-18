@@ -75,27 +75,39 @@ export  class  WarControllerContexter implements WarControllerContext {
 
   lendSpawn(): boolean {
 
-    Memory.SpawnLock = true;
+
 
     return true;
   }
 
   remandSpawn(): void {
-    Memory.SpawnLock = true;
+
   }
 
-  static getRoomManager(): Creep[] {
-    return _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester' || creep.memory.role == 'truck'|| creep.memory.role == 'upgrader'|| creep.memory.role == 'repairer');
+  static getRoomManager(spawn:any): Creep[] {
+
+    // creep.memory.role == 'harvester' || creep.memory.role == 'truck'|| creep.memory.role == 'upgrader'|| creep.memory.role == 'repairer'
+    return _.filter(Game.creeps, (creep) => (creep.memory.role == 'harvester' || creep.memory.role == 'truck' || creep.memory.role == 'upgrader' || creep.memory.role == 'repairer') && spawn.room == creep.room)
+
+
   }
-  static lendSpawn() {
-    Memory.SpawnLock = false;
+  /**
+   * @param spawn1
+   */
+  static lendSpawn(spawn1: any ) {
+
+
+    Memory.world[spawn1.room.name].SpawnLock = false;
 
     return false;
 
   }
 
-  static remandSpawn() {
-    Memory.SpawnLock = true;
+  /**
+   * @param spawn1
+   */
+  static remandSpawn(spawn1: any ) {
+    Memory.world[spawn1.room.name].SpawnLock = true;
 
   }
 }

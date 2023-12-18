@@ -24,7 +24,7 @@ export const loop = function (): void {
 
     for (let spawn in Game.spawns) {
       const 治疗攻击二人小队 = [ATTACK, HEAL];
-    //   warController.addSquad(Game.spawns[spawn],治疗攻击二人小队);
+      warController.addSquad(Game.spawns[spawn],治疗攻击二人小队);
 
 
       let buildClass = new building(Game.spawns[spawn]);

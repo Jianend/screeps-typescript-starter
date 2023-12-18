@@ -1,22 +1,35 @@
 import {StructureSpawns} from "utils/prototype.spawn";
 
- export class building {
+export class building {
 
   spawn: StructureSpawn;
 
-  constructor(spawn:StructureSpawn) {
+  constructor(spawn: StructureSpawn) {
     this.spawn = spawn;
   }
 
   run(): void {
 
-   this.build(this.spawn, STRUCTURE_EXTENSION);
+    this.build(this.spawn, STRUCTURE_EXTENSION);
     this.build(this.spawn, STRUCTURE_TOWER);
 
-    if (Memory.SpawnLock) {
+    if (!Memory.world) {
+      Memory.world = {};
+    }
+
+    if (!Memory.world[this.spawn.room.name]) {
+      Memory.world[this.spawn.room.name] = {};
+    }
+    if (Memory.world[this.spawn.room.name].SpawnLock==undefined) {
+      Memory.world[this.spawn.room.name].SpawnLock = true;
+    }
+
+
+    if (Memory.world[this.spawn.room.name].SpawnLock) {
       this.creepGenerators(this.spawn);
     }
   }
+
   getRandomFreePos(startPos: RoomPosition, distance: number) {
     let x: number;
     let y: number;
@@ -37,22 +50,18 @@ import {StructureSpawns} from "utils/prototype.spawn";
       this.getRandomFreePos(spawn.pos, 5).createConstructionSite(structureType);
     }
   }
+
   creepGenerators(spawn: StructureSpawn) {
 
     let StructureSpawn = new StructureSpawns(spawn);
 
 
-
-
     // var time = Game.time;
-    let harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester'&& spawn.room==creep.room);
-    let upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader'&& spawn.room==creep.room);
-    let builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder'&& spawn.room==creep.room);
-    let trucks = _.filter(Game.creeps, (creep) => creep.memory.role == 'truck'&& spawn.room==creep.room);
-    let repairers = _.filter(Game.creeps, (creep) => creep.memory.role == 'repairer'&& spawn.room==creep.room);
-
-
-
+    let harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester' && spawn.room == creep.room);
+    let upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader' && spawn.room == creep.room);
+    let builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder' && spawn.room == creep.room);
+    let trucks = _.filter(Game.creeps, (creep) => creep.memory.role == 'truck' && spawn.room == creep.room);
+    let repairers = _.filter(Game.creeps, (creep) => creep.memory.role == 'repairer' && spawn.room == creep.room);
 
 
     let energy = spawn.room.energyCapacityAvailable;
@@ -62,21 +71,13 @@ import {StructureSpawns} from "utils/prototype.spawn";
     /**harvester   truck  10个 */
 
 
-    if (!Memory.world) {
-        Memory.world = {};
-    }
-
-    if (!Memory.world[spawn.room.name]) {
-        Memory.world[spawn.room.name] = {};
-    }
-
     if (!Memory.world[spawn.room.name].food) {
-        Memory.world[spawn.room.name].food = 'Harvester';
+      Memory.world[spawn.room.name].food = 'Harvester';
     }
     if (!Memory.world[spawn.room.name].creepNum) {
-        Memory.world[spawn.room.name].creepNum = 2;
+      Memory.world[spawn.room.name].creepNum = 2;
     }
-    let creep= Memory.world[spawn.room.name].creepNum
+    let creep = Memory.world[spawn.room.name].creepNum
 
 
     // console.log(creep > trucks.length || creep > harvesters.length)
@@ -87,19 +88,17 @@ import {StructureSpawns} from "utils/prototype.spawn";
         if (harvesters.length < creep) {
 
 
-
           if (harvesters.length === 0) {
-            console.log(harvesters.length+""+spawn);
+            console.log(harvesters.length + "" + spawn);
 
             let a: string | number | void;
             a = StructureSpawn.createHarvester(
               300)
 
 
-
             if (typeof a === "string") {
               console.log('Spawning new harvester: ');
-              Memory.world[spawn.room.name].food= 'Truck';
+              Memory.world[spawn.room.name].food = 'Truck';
             }
 
 
@@ -113,25 +112,21 @@ import {StructureSpawns} from "utils/prototype.spawn";
             if (energy >= 300) {
 
 
-
               let a: string | number | void;
               a = StructureSpawn.createHarvester(
                 800)
 
 
-
-
-
               if (typeof a === "string") {
                 console.log('Spawning new harvester: ');
-                Memory.world[spawn.room.name].food= 'Truck';
+                Memory.world[spawn.room.name].food = 'Truck';
 
 
               }
             }
           }
         } else {
-            Memory.world[spawn.room.name].food= 'Truck';
+          Memory.world[spawn.room.name].food = 'Truck';
         }
 
 
@@ -161,7 +156,7 @@ import {StructureSpawns} from "utils/prototype.spawn";
 
               if (typeof a === "string") {
                 console.log('Spawning new truck: ');
-                Memory.world[spawn.room.name].food= 'Harvester'
+                Memory.world[spawn.room.name].food = 'Harvester'
 
 
               }
@@ -172,7 +167,7 @@ import {StructureSpawns} from "utils/prototype.spawn";
           }
 
         } else {
-            Memory.world[spawn.room.name].food = 'Harvester';
+          Memory.world[spawn.room.name].food = 'Harvester';
         }
 
       }
@@ -181,7 +176,7 @@ import {StructureSpawns} from "utils/prototype.spawn";
 
 
     // harvester等于2的时候生产 upgrader
-    if (trucks.length >= creep && upgraders.length < 2) {
+    if (trucks.length >= creep && upgraders.length < creep) {
       let a: string | number | void;
 
 
@@ -211,8 +206,8 @@ import {StructureSpawns} from "utils/prototype.spawn";
     }
 
     // console.log(upgraders.length>=2 )
-    if (upgraders.length >=creep && repairers.length < 2) {
-    //   console.log("repairers")
+    if (upgraders.length >= creep && repairers.length < creep) {
+      //   console.log("repairers")
       let a: string | number | void;
 
       a = StructureSpawn.createCustomCreep(
@@ -226,11 +221,7 @@ import {StructureSpawns} from "utils/prototype.spawn";
 
   }
 
- public static WarSquad(Spawn:StructureSpawn,  body: BodyPartConstant[]): number {
-
-
-
-
+  public static WarSquad(Spawn: StructureSpawn, body: BodyPartConstant[]): number {
 
 
     let StructureSpawn = new StructureSpawns(Spawn);
@@ -238,23 +229,20 @@ import {StructureSpawns} from "utils/prototype.spawn";
     let energy = Spawn.room.energyCapacityAvailable;
 
 
+    let attackers = _.filter(Game.creeps, (creep) => creep.memory.role == 'attacker' && Spawn.room == creep.room);
+    let heals = _.filter(Game.creeps, (creep) => creep.memory.role == 'heal' && Spawn.room == creep.room);
 
-    let attackers = _.filter(Game.creeps, (creep) => creep.memory.role == 'attacker'&& Spawn.room==creep.room);
-    let heals = _.filter(Game.creeps, (creep) => creep.memory.role == 'heal'&& Spawn.room==creep.room);
-
-    let num=0;
+    let num = 0;
     for (let bodyElement of body) {
 
       let a: string | number | void;
-
-
 
 
       switch (bodyElement) {
         case "attack": {
 
           if (attackers.length < 1) {
-            a= StructureSpawn.createAttacker(energy);
+            a = StructureSpawn.createAttacker(energy);
 
             if (typeof a === "string") {
               console.log('Spawning new createAttacker: ');
@@ -266,11 +254,11 @@ import {StructureSpawns} from "utils/prototype.spawn";
 
           if (heals.length < 1) {
 
-            a=StructureSpawn.createHeal(energy);
+            a = StructureSpawn.createHeal(energy);
             // console.log(a+"hhhhhhhhh"+energy)
             if (typeof a === "string") {
               console.log('Spawning new createHeal: ');
-             num++
+              num++
             }
 
           }
@@ -278,13 +266,13 @@ import {StructureSpawns} from "utils/prototype.spawn";
       }
     }
 
-   if (!num) {
+    if (!num) {
 
-     return 0;
+      return 0;
 
-   }else {
-     return -1;
-   }
+    } else {
+      return -1;
+    }
 
 
   }
