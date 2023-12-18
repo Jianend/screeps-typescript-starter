@@ -1,5 +1,6 @@
 // var builder = require('builder');
 import { builder } from "./builder";
+import {findNearestContainer} from "utils/findNearestContainer";
 
    export var repairer = {
     // a function to run the logic for this role
@@ -107,31 +108,31 @@ import { builder } from "./builder";
 };
 
 
-function findNearestContainer(creep: Creep, energyNotFull: StructureContainer[]): StructureContainer | null {
-    if (energyNotFull.length === 0) {
-        return null; // 提前返回，避免不必要的计算
-    }
+// function findNearestContainer(creep: Creep, energyNotFull: StructureContainer[]): StructureContainer | null {
+//     if (energyNotFull.length === 0) {
+//         return null; // 提前返回，避免不必要的计算
+//     }
 
-    let target = creep.pos;
-    let nearestContainer: StructureContainer | null = null;
-    let nearestDistance = Infinity;
+//     let target = creep.pos;
+//     let nearestContainer: StructureContainer | null = null;
+//     let nearestDistance = Infinity;
 
-    for (let container of energyNotFull) {
-        let containerPos = container.pos;
-        // 你可以考虑使用 Pathfinder.search 来获取更准确的距离，但以下的方法对于简单的场景应该足够了。
-        let distance = Math.abs(target.x - containerPos.x) + Math.abs(target.y - containerPos.y);
+//     for (let container of energyNotFull) {
+//         let containerPos = container.pos;
+//         // 你可以考虑使用 Pathfinder.search 来获取更准确的距离，但以下的方法对于简单的场景应该足够了。
+//         let distance = Math.abs(target.x - containerPos.x) + Math.abs(target.y - containerPos.y);
 
-        if (distance < nearestDistance) {
-            nearestContainer = container;
-            nearestDistance = distance;
-        }
-    }
+//         if (distance < nearestDistance) {
+//             nearestContainer = container;
+//             nearestDistance = distance;
+//         }
+//     }
 
-    return nearestContainer;
-}
+//     return nearestContainer;
+// }
 
 
-function creepWithdrawAndDeposit(creep: Creep, containers: StructureContainer) {
+function creepWithdrawAndDeposit(creep: Creep, containers: Structure) {
 
 
 

@@ -1,4 +1,4 @@
-import { Tracing } from "trace_events";
+import {findNearestContainer} from "utils/findNearestContainer";
 
 // const Colors = require("Colors");
 
@@ -19,65 +19,63 @@ export var truck = {
         }
 
         if (creep.memory.transport) {
-            // const currentRoom = Game.rooms[c];
-            const currentRoom = creep.room;
+          const targets = creep.room.find(FIND_HOSTILE_CREEPS);
 
-            // const containers:Structure[] = currentRoom.find(FIND_STRUCTURES, { filter: { structureType: STRUCTURE_CONTAINER } });
-            // const containers: Structure[] = currentRoom.find(FIND_STRUCTURES, {
-            //     filter: (s) { s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_TOWER },
-            // });
-            var STORAGE = creep.room.find(FIND_STRUCTURES, { //找出需要补充能量的建筑
-                filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_STORAGE || structure.structureType == STRUCTURE_CONTAINER ) &&
-                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-                }
+
+          if (targets) {
+
+            const tower = creep.room.find(FIND_STRUCTURES, { //找出需要补充能量的建筑
+              filter: (structure) => {
+                return (structure.structureType == STRUCTURE_TOWER) &&
+                  structure.store.getFreeCapacity(RESOURCE_ENERGY) > creep.store.energy;
+              }
             });
 
-            var tower = creep.room.find(FIND_STRUCTURES, { //找出需要补充能量的建筑
-                filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_TOWER) &&
-                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > creep.store.energy;
-                }
+            if (tower) {
+
+              var nearestower: Structure | null = findNearestContainer(creep, tower);
+
+              // var  Container:StructureContainer;
+              if (nearestower !== null) {
+                // 在这个代码块里，TypeScript 知道 container 不是 null，所以你可以安全地使用它的所有 StructureContainer 属性和方法。
+                nearestower = nearestower as StructureContainer
+              } else {
+                return;
+              }
+              // 现在，energyNotFull数组包含了所有能量没有满的元素
+              // 你可以对这个数组进行进一步的操作
+              creepWithdrawAndDeposit(creep, nearestower);
+
+            }
+
+
+          }else {
+
+
+            const STORAGE = creep.room.find(FIND_STRUCTURES, { //找出需要补充能量的建筑
+              filter: (structure) => {
+                return (structure.structureType == STRUCTURE_STORAGE || structure.structureType == STRUCTURE_CONTAINER) &&
+                  structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+              }
             });
 
 
-            var targets = creep.room.find(FIND_STRUCTURES, { //找出需要补充能量的建筑
-                filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_EXTENSION ||
-                        structure.structureType == STRUCTURE_SPAWN) &&
-                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-                }
+            const target = creep.room.find(FIND_STRUCTURES, { //找出需要补充能量的建筑
+              filter: (structure) => {
+                return (structure.structureType == STRUCTURE_EXTENSION ||
+                    structure.structureType == STRUCTURE_SPAWN) &&
+                  structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+              }
             });
-            if (targets.length > 0) { // 需要维护的建筑数目 > 0
-                if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' },reusePath:50 });
-                }
-            }else if (tower.length) {
-
-
-                var nearestower: Structure | null = findNearestContainer(creep, tower);
-
-                // var  Container:StructureContainer;
-                if (nearestower !== null) {
-                    // 在这个代码块里，TypeScript 知道 container 不是 null，所以你可以安全地使用它的所有 StructureContainer 属性和方法。
-                    nearestower = nearestower as StructureContainer
-
-                } else {
-
-                    return;
-                }
-                // 现在，energyNotFull数组包含了所有能量没有满的元素
-                // 你可以对这个数组进行进一步的操作
-
-                creepWithdrawAndDeposit(creep, nearestower);
-
-
-
+            if (target.length > 0) { // 需要维护的建筑数目 > 0
+              if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' },reusePath:50 });
+              }
             } else if (STORAGE.length > 0) {
 
 
               // let energyNotFull = containers.filter((element) => element.store.energy < element.store.getCapacity());
-              var nearestContainer: Structure | null = findNearestContainer(creep, STORAGE);
+              let nearestContainer: Structure | null = findNearestContainer(creep, STORAGE);
 
               // var  Container:StructureContainer;
               if (nearestContainer !== null) {
@@ -94,6 +92,10 @@ export var truck = {
               creepWithdrawAndDeposit(creep, nearestContainer);
 
             }
+
+          }
+
+
 
 
 
@@ -123,28 +125,7 @@ export var truck = {
 };
 
 
-function findNearestContainer(creep: Creep, energyNotFull: Structure[]): Structure | null {
-    if (energyNotFull.length === 0) {
-        return null; // 提前返回，避免不必要的计算
-    }
 
-    let target = creep.pos;
-    let nearestContainer: Structure | null = null;
-    let nearestDistance = Infinity;
-
-    for (let container of energyNotFull) {
-        let containerPos = container.pos;
-        // 你可以考虑使用 Pathfinder.search 来获取更准确的距离，但以下的方法对于简单的场景应该足够了。
-        let distance = Math.abs(target.x - containerPos.x) + Math.abs(target.y - containerPos.y);
-
-        if (distance < nearestDistance) {
-            nearestContainer = container;
-            nearestDistance = distance;
-        }
-    }
-
-    return nearestContainer;
-}
 
 
 

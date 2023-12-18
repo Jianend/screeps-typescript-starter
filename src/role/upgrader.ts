@@ -1,3 +1,4 @@
+import {findNearestContainer} from "utils/findNearestContainer";
 
 
 /**
@@ -50,7 +51,7 @@ export const roleUpgrader = {
 
             if (nearestContainer !== null) {
                 // 在这个代码块里，TypeScript 知道 container 不是 null，所以你可以安全地使用它的所有 StructureContainer 属性和方法。
-                nearestContainer = nearestContainer as StructureContainer
+                nearestContainer = nearestContainer
 
             } else {
 
@@ -76,25 +77,25 @@ export const roleUpgrader = {
   };
 
 
-function findNearestContainer(creep: Creep, energyNotFull: StructureContainer[]) {
-    let target = creep.pos;
-    let nearestContainer = null;
-    let nearestDistance = Infinity;
+// function findNearestContainer(creep: Creep, energyNotFull: Structure[]) {
+//     let target = creep.pos;
+//     let nearestContainer = null;
+//     let nearestDistance = Infinity;
 
-    for (let container of energyNotFull) {
-        let containerPos = container.pos;
-        let distance = Math.abs(target.x - containerPos.x) + Math.abs(target.y - containerPos.y);
+//     for (let container of energyNotFull) {
+//         let containerPos = container.pos;
+//         let distance = Math.abs(target.x - containerPos.x) + Math.abs(target.y - containerPos.y);
 
-        if (distance < nearestDistance) {
-            nearestContainer = container;
-            nearestDistance = distance;
-        }
-    }
+//         if (distance < nearestDistance) {
+//             nearestContainer = container;
+//             nearestDistance = distance;
+//         }
+//     }
 
-    return nearestContainer;
-}
+//     return nearestContainer;
+// }
 
-function creepWithdrawAndDeposit(creep: Creep, container: StructureContainer) {
+function creepWithdrawAndDeposit(creep: Creep, container: Structure) {
     if (creep.withdraw(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
         creep.moveTo(container, { visualizePathStyle: { stroke: 'ffffff' } ,reusePath:50});
     }
