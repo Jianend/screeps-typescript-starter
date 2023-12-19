@@ -181,7 +181,7 @@ export class building {
 
 
       a = StructureSpawn.createCustomCreep(
-        300, 'upgrader')
+        500, 'upgrader')
 
       if (typeof a === "string") {
         console.log('Spawning new upgrader: ');
@@ -190,14 +190,14 @@ export class building {
 
     }
 
-    if (spawn.room.find(FIND_CONSTRUCTION_SITES).length > 0) {
+    if (spawn.room.find(FIND_CONSTRUCTION_SITES).length > creep) {
       // 生产builder
       if (builders.length < 0) {
         let a: string | number | void;
 
 
         a = StructureSpawn.createCustomCreep(
-          300, 'builder')
+          500, 'builder')
 
         if (typeof a === "string") {
           console.log('Spawning new builder: ');
@@ -211,7 +211,7 @@ export class building {
       let a: string | number | void;
 
       a = StructureSpawn.createCustomCreep(
-        300, 'repairer')
+        500, 'repairer')
 
       if (typeof a === "string") {
         console.log('Spawning new repairer: ');

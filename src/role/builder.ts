@@ -54,14 +54,6 @@ export var builder = {
 
             if (containers.length > 0) {
 
-                // const energyNotFull: Structure[] = containers.filter(
-                //     (container) => container.store.energy >0
-                // );
-
-
-
-
-                // let energyNotFull = containers.filter(element => element.store.energy > 0);
 
                 var nearestContainer = findNearestContainer(creep, containers);
 

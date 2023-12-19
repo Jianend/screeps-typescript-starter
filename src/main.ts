@@ -18,13 +18,13 @@ import { MySpawn } from "utils/safeMode";
 
 export const loop = function (): void {
 
-
+    const 治疗攻击二人小队 = [ATTACK, HEAL];
 
   const allTowers: StructureTower[] = [];
 
     for (let spawn in Game.spawns) {
-      const 治疗攻击二人小队 = [ATTACK, HEAL];
-      warController.addSquad(Game.spawns[spawn],治疗攻击二人小队);
+
+    //   warController.addSquad(Game.spawns[spawn],治疗攻击二人小队);
 
 
       let buildClass = new building(Game.spawns[spawn]);
@@ -43,17 +43,18 @@ export const loop = function (): void {
     //     filter: { structureType: STRUCTURE_TOWER, my: true }
     // });
 
-
-  for (const roomName in Game.rooms) {
-    getRoomResources(roomName)
-
-  }
+  //
+  // for (const roomName in Game.rooms) {
+  //   getRoomResources(roomName)
+  //
+  // }
 
     // 根据 screep 的角色分配不同的任务
     for (const name in Game.creeps) {
         const creep = Game.creeps[name];
         if (creep.memory.role === "harvester") {
             if (!creep.memory.sources) {
+              getRoomResources(creep.room.name);
                 // console.log("a");
                 creep.memory.sources = getMinimumNumTerrain(creep);
             }
@@ -90,7 +91,7 @@ export const loop = function (): void {
 
 
 function getRoomResources(roomName: string) {
-    if (Game.time % 20 === 0) {
+
         let room = Game.rooms[roomName];
         const resources = room.find(FIND_SOURCES);
         count = 0;
@@ -124,7 +125,7 @@ function getRoomResources(roomName: string) {
         Memory.roomResources[roomName] = terrainData;
 
 
-    }
+
 }
 
 function getMinimumNumTerrain(creep: Creep) {
